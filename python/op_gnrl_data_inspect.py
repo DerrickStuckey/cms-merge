@@ -3,6 +3,8 @@ __author__ = 'dstuckey'
 import csv
 import zipfile
 
+import provider
+
 #openpayments_filename = "/Users/dstuckey/Downloads/12192014_RFRSHDTL/OPPR_RFRSH_DTL_GNRL_12192014.csv"
 #openpayments_filename = "/Users/dstuckey/Downloads/12192014_RFRSHDTL/OPPR_RFRSH_DTL_OWNRSHP_12192014.csv"
 #openpayments_filename = "/Users/dstuckey/Downloads/12192014_RFRSHDTL/OPPR_RFRSH_DTL_RSRCH_12192014.csv"
@@ -34,3 +36,13 @@ with open(opn_gen_zipfilename) as thezip:
             print key, " : ", first[key]
 
 
+def extract_provider(record):
+    #zip code (first 5) needs to come from "Physician Profile" record
+    thedoc = provider.Provider(
+        first_name = record['Physician_First_Name'],
+        last_name = record['Physician_Last_Name'],
+        middle_initial=record['Physician_Middle_Name'],
+        zip_first_5 = record['Recipient_Zip_Code'][0:5],
+        zip_ext = record['Recipient_Zip_Code'][5:9], #probably blank
+        op_profile_id = record['Physician_Profile_ID']
+    )
